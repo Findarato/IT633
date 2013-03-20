@@ -10,11 +10,12 @@ def processMusic(genres, data):
     dSize = len(data[0])
     rIdx = range(dSize)
     mix = shuffle(rIdx)
+    #lets create a random samble for both the training and then the remainder becomes the test
     trainIdx = rIdx[0:int(dSize*0.8)]
     testIdx  = rIdx[int(dSize*0.8)+1:]
     
     #Step 2 - Learning Gaussian Model for each Genre
-    gModel= list()
+    gModel = list()
     for g in range(len(genres)):
       trainMat = data[g][trainIdx[0]]['featureMat']
       for i in range(1,len(trainIdx)):
