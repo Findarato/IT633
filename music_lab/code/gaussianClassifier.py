@@ -20,8 +20,7 @@ def processMusic(genres, data):
       trainMat = data[g][trainIdx[0]]['featureMat']
       for i in range(1,len(trainIdx)):
         trainMat = append(trainMat, data[g][trainIdx[i]]['featureMat'], axis =0)
-      gModel.append({'mean':mean(trainMat,0), 'cov':cov(trainMat,rowvar=0),\
-                    'icov':linalg.inv(cov(trainMat,rowvar=0))})
+      gModel.append({'mean':mean(trainMat,0), 'cov':cov(trainMat,rowvar=0),'icov':linalg.inv(cov(trainMat,rowvar=0))})
 
     
     #Step 3: Calculating Average Unnormalized Likelihood for each test song and genre model
@@ -74,13 +73,12 @@ def loadData(dataDir, genres):
         f = open(sFile)
         lines = f.readlines()
         meta = lines[0].replace("#","").split("-")
-        songDict = {'file':sFiles[s],'song': meta[0].strip(), 'artist':meta[1].strip()}
+        songDict = {}
         
         #read in matrix of values starting from second line in data file
         mat = list()
         for i in range(1,len(lines)):
           vec = lines[i].split(",")
-          #cast to floats
           for j in range(len(vec)):
             vec[j] = float(vec[j])
           mat.append(vec)  
