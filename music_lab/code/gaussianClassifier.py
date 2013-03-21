@@ -19,8 +19,8 @@ def processMusic(genres, data):
     for g in range(len(genres)):
       trainMat = data[g][trainIdx[0]]['featureMat']
       for i in range(1,len(trainIdx)):
-        trainMat = append(trainMat, data[g][trainIdx[i]]['featureMat'], axis =0)
-      gModel.append({'mean':mean(trainMat,0), 'cov':cov(trainMat,rowvar=0),'icov':linalg.inv(cov(trainMat,rowvar=0))})
+        trainMat = append(trainMat, data[g][trainIdx[i]]['featureMat'], axis = 0)
+      gModel.append({'mean':mean(trainMat,0), 'cov':cov(trainMat,rowvar = 0),'icov':linalg.inv(cov(trainMat,rowvar = 0))})
 
     
     #Step 3: Calculating Average Unnormalized Likelihood for each test song and genre model
@@ -46,7 +46,6 @@ def processMusic(genres, data):
     
     #Step 4 Evaluate Results
     [cfm, acc] = createConfusionMatrix(guess)
-    print "Trial Accuracy = ", acc
     return cfm, acc     
     
     
@@ -67,12 +66,11 @@ def loadData(dataDir, genres):
       genreDir = dataDir+"/"+genres[g]
       data.append(list())
       sFiles = listdir(genreDir)
+      #read in the data
       for s in range(len(sFiles)):
-        
         sFile = genreDir+"/"+sFiles[s]
         f = open(sFile)
         lines = f.readlines()
-        meta = lines[0].replace("#","").split("-")
         songDict = {}
         
         #read in matrix of values starting from second line in data file
@@ -83,7 +81,6 @@ def loadData(dataDir, genres):
             vec[j] = float(vec[j])
           mat.append(vec)  
             
-          
         songDict['featureMat'] = array(mat)  
         data[g].append(songDict)
     
@@ -114,14 +111,13 @@ def randomFoldCrossValidation(numTrials = 10):
     #Step 1: load data into a list of list representation - each song is a dictionary
     print "Loading Data..."
     data = loadData(dataDir, genres)
+    print "Processing Data..."
     [cfm, acc] = processMusic(genres,data)
     for i in range(numTrials-1):
       newCfm, newAcc = processMusic(genres,data)
       cfm = cfm + newCfm
       acc = acc + newAcc
   
-    print genres
-    print cfm
     print "Overall Accuracy:",acc/float(numTrials)
 
 
